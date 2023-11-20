@@ -21,7 +21,6 @@ public class Main {
 		 */
 
 		// SpringApplication.run(Main.class, args);
-		@SuppressWarnings("unused")
 		ConfigurableApplicationContext applicationContext = SpringApplication.run(Main.class, args);
 
 
