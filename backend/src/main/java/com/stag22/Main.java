@@ -1,7 +1,5 @@
 package com.stag22;
 
-import java.util.List;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,6 +21,7 @@ public class Main {
 		 */
 
 		// SpringApplication.run(Main.class, args);
+		@SuppressWarnings("unused")
 		ConfigurableApplicationContext applicationContext = SpringApplication.run(Main.class, args);
 
 

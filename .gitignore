@@ -33,12 +33,13 @@ build/
 .vscode/
 
 # Local registry data
-local-registry/auth/
-local-registry/data/
+**/local-registry/auth/
+**/local-registry/data/
 
 # Java build directories
 bin/
 target/
+.mvn/
 
 #mac
 */.DS_store

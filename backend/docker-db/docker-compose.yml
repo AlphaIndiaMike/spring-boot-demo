@@ -15,15 +15,6 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - postgres_network
-      
-  javaapi:
-    container_name: stag22
-    image: localhost:5000/homenet/stag22-api:latest
-    depends_on:
-      - postgres
-    #networks:
-    #  - postgres_network
-    network_mode: "host"
 
 networks:
   postgres_network:
