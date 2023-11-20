@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: amigo
+      POSTGRES_PASSWORD: pass1233
+      POSTGRES_DB: customer
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - postgres_network
+      
+  javaapi:
+    container_name: stag22
+    image: localhost:5000/homenet/stag22-api:latest
+    depends_on:
+      - postgres
+    #networks:
+    #  - postgres_network
+    network_mode: "host"
+
+networks:
+  postgres_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

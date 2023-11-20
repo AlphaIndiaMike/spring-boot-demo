@@ -1,0 +1,23 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+  
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/customer
+    username: amigo
+    password: pass1233
+  jpa:
+    hibernate:
+      ddl-auto: validate # create-drop #update - for persistent schema
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true #default - false
+  main:
+    web-application-type: SERVLET
+logging:
+  level:
+    org.flywaydb: DEBUG
