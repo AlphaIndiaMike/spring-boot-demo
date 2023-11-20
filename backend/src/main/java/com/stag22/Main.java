@@ -36,7 +36,6 @@ public class Main {
 					faker.internet().safeEmailAddress(),
 					faker.number().numberBetween(18, 90)
 			);
-		   
 		    cRep.save(alex);
 		};
 	}
