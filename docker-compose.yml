@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  postgres:
+  db:
     container_name: postgres
     image: postgres
     restart: unless-stopped
@@ -19,11 +19,15 @@ services:
   javaapi:
     container_name: stag22
     image: localhost:5000/homenet/stag22-api:latest
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/customer"
     depends_on:
-      - postgres
-    #networks:
-    #  - postgres_network
-    network_mode: "host"
+      - db
+    ports:
+      - "8080:8080"
+    networks:
+      - postgres_network
+    #network_mode: "host"
 
 networks:
   postgres_network:
