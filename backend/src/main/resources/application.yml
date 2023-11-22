@@ -3,9 +3,13 @@ server:
   error:
     include-message: always
   
+cors:
+  allowed-origins: "*"
+  allowed-methods: "*"
+  
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/customer
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/customer}
     username: amigo
     password: pass1233
   jpa:
