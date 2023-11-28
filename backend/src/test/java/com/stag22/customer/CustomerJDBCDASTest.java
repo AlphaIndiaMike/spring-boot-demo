@@ -32,8 +32,8 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 		Customer customer = new Customer(
 				FAKER.name().fullName(),
 				FAKER.internet().safeEmailAddress()+ "-" +UUID.randomUUID(),
-				20
-				);
+				20,
+				Gender.MALE);
 		underTest.insertCustomer(customer);
 		//When
 		List<Customer> customers = underTest.selectAllCustomers();
@@ -50,7 +50,8 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 		Customer customer = new Customer(
 				FAKER.name().fullName(),
 				email,
-				20);
+				200,
+				Gender.MALE);
 		
 		underTest.insertCustomer(customer);
 
@@ -97,7 +98,8 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 		Customer customer = new Customer(
 				FAKER.name().fullName(),
 				email,
-				20);
+				200,
+				Gender.MALE);
 		
 		underTest.insertCustomer(customer);
 		
@@ -128,7 +130,8 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 		Customer customer = new Customer(
 				FAKER.name().fullName(),
 				email,
-				20);
+				20,
+				Gender.MALE);
 		
 		underTest.insertCustomer(customer);
 		
@@ -167,7 +170,8 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 		Customer customer = new Customer(
 				FAKER.name().fullName(),
 				email,
-				20);
+				20,
+				Gender.MALE);
 		
 		underTest.insertCustomer(customer);
 		
@@ -195,7 +199,8 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 		Customer customer = new Customer(
 				FAKER.name().fullName(),
 				email,
-				20);
+				20,
+				Gender.MALE);
 		
 		underTest.insertCustomer(customer);
 		
@@ -233,7 +238,8 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 		Customer customer = new Customer(
 				FAKER.name().fullName(),
 				email,
-				20);
+				20,
+				Gender.MALE);
 		
 		underTest.insertCustomer(customer);
 		
@@ -271,7 +277,8 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 		Customer customer = new Customer(
 				FAKER.name().fullName(),
 				email,
-				20);
+				20,
+				Gender.MALE);
 		
 		underTest.insertCustomer(customer);
 		
@@ -310,7 +317,8 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 		Customer customer = new Customer(
 				FAKER.name().fullName(),
 				email,
-				20);
+				20,
+				Gender.MALE);
 		
 		underTest.insertCustomer(customer);
 		

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import com.github.javafaker.Faker;
 import com.stag22.customer.Customer;
 import com.stag22.customer.CustomerRepository;
+import com.stag22.customer.Gender;
 
 @SpringBootApplication
 public class Main {
@@ -34,7 +35,8 @@ public class Main {
 			Customer alex = new Customer(
 					faker.name().fullName(),
 					faker.internet().safeEmailAddress(),
-					faker.number().numberBetween(18, 90)
+					faker.number().numberBetween(18, 90),
+					Gender.MALE
 			);
 		    cRep.save(alex);
 		};
