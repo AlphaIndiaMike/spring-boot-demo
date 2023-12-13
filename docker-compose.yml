@@ -18,7 +18,7 @@ services:
       
   javaapi:
     container_name: stag22
-    image: localhost:5000/homenet/stag22-api:latest
+    image: localhost:5000/homenet/stag22-api:1.1-SNAPSHOT
     environment:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/customer"
     depends_on:
