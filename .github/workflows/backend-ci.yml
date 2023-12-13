@@ -15,7 +15,7 @@ jobs:
         image: postgres
         env: 
           POSTGRES_USER: amigo
-          POSTGRES_PASSWORD: test1233
+          POSTGRES_PASSWORD: pass1233
           POSTGRES_DB: customer
         ports:
           - 5432:5432

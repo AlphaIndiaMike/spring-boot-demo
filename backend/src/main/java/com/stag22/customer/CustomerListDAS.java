@@ -18,7 +18,8 @@ public class CustomerListDAS implements CustomerDao{
 				1L,
 				"Alex",
 				"alex@gmail.com",
-				21
+				21,
+				Gender.MALE
 		);
 		customers.add(alex);
 		
@@ -27,7 +28,8 @@ public class CustomerListDAS implements CustomerDao{
 	        2L,
 	        "Brian",
 	        "brian@example.com",
-	        35
+	        35,
+	        Gender.MALE
 	    );
 	    customers.add(brian);
 
@@ -35,7 +37,8 @@ public class CustomerListDAS implements CustomerDao{
 	        3L,
 	        "Charlotte",
 	        "charlotte@example.com",
-	        28
+	        28,
+	        Gender.FEMALE
 	    );
 	    customers.add(charlotte);
 
@@ -43,7 +46,8 @@ public class CustomerListDAS implements CustomerDao{
 	        4L,
 	        "Diana",
 	        "diana@example.com",
-	        42
+	        42,
+	        Gender.FEMALE
 	    );
 	    customers.add(diana);
 	}

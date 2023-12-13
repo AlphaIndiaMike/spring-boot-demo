@@ -9,6 +9,7 @@ import com.github.javafaker.Faker;
 import com.stag22.customer.Customer;
 import com.stag22.customer.CustomerRegistrationRequest;
 import com.stag22.customer.CustomerUpdateRequest;
+import com.stag22.customer.Gender;
 
 import reactor.core.publisher.Mono;
 
@@ -36,8 +37,10 @@ public class CustomerIntegrationTest {
 		String name = FAKER.name().fullName();
 		String email = FAKER.name().firstName() + UUID.randomUUID() + "@gmail.com";
 		int age = FAKER.random().nextInt(18, 90);
+		Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
+		
  		CustomerRegistrationRequest request = new CustomerRegistrationRequest(
- 				name, email, age);
+ 				name, email, age, gender);
 		
 		//send a post request
  		postmann.post()
@@ -61,7 +64,7 @@ public class CustomerIntegrationTest {
  			.getResponseBody();
  		
 		//make sure that customer is present
- 		Customer expected = new Customer(name, email, age);
+ 		Customer expected = new Customer(name, email, age, gender);
  			
  		assertThat(allCustomers)
  			.usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
@@ -96,8 +99,9 @@ public class CustomerIntegrationTest {
 		String name = FAKER.name().fullName();
 		String email = FAKER.name().firstName() + UUID.randomUUID() + "@gmail.com";
 		int age = FAKER.random().nextInt(18, 90);
+		Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
  		CustomerRegistrationRequest request = new CustomerRegistrationRequest(
- 				name, email, age);
+ 				name, email, age, gender);
 		
 		//send a post request
  		postmann.post()
@@ -152,8 +156,9 @@ public class CustomerIntegrationTest {
 		String name = FAKER.name().fullName();
 		String email = FAKER.name().firstName() + UUID.randomUUID() + "@gmail.com";
 		int age = FAKER.random().nextInt(18, 90);
+		Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
  		CustomerRegistrationRequest request = new CustomerRegistrationRequest(
- 				name, email, age);
+ 				name, email, age, gender);
 		
 		//send a post request
  		postmann.post()
@@ -187,7 +192,7 @@ public class CustomerIntegrationTest {
  		String newName = "George";
  		
  		CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
- 				newName, null, null
+ 				newName, null, null, null
  				);
  				
  		
@@ -211,7 +216,7 @@ public class CustomerIntegrationTest {
 			.returnResult()
 			.getResponseBody();
 			
- 		Customer customer = new Customer(id, newName, email, age);
+ 		Customer customer = new Customer(id, newName, email, age, gender);
  		
  		assertThat(updatedCustomer)
  			.usingRecursiveComparison()

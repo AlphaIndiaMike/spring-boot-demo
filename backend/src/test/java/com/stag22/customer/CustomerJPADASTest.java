@@ -52,7 +52,7 @@ class CustomerJPADASTest {
 	@Test
 	void testInsertCustomer() {
 		Customer customer = new Customer(
-				1L, "Ali", "Ali@gmail.com", 18);
+				1L, "Ali", "Ali@gmail.com", 18, Gender.MALE);
 		underTest.insertCustomer(customer);
 		Mockito.verify(customerRepository).save(customer);
 	}
@@ -94,7 +94,7 @@ class CustomerJPADASTest {
 	@Test
 	void testUpdateCustomer() {
 		Customer customer = new Customer(
-				1L, "Ali", "Ali@gmail.com", 18);
+				1L, "Ali", "Ali@gmail.com", 18, Gender.MALE);
 		underTest.updateCustomer(customer);
 		Mockito.verify(customerRepository).save(customer);
 	}

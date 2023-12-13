@@ -20,7 +20,7 @@ public class CustomerJDBCDAS implements CustomerDao{
 	@Override
 	public List<Customer> selectAllCustomers() {
 		var sql = """
-				SELECT id, name, email, age
+				SELECT id, name, email, age, gender
 				FROM customer
 				""";
 		List<Customer> customers = JdbcTemplate.query(sql, customerRowMapper);
@@ -30,7 +30,7 @@ public class CustomerJDBCDAS implements CustomerDao{
 	@Override
 	public Optional<Customer> selectCustomerById(Integer Id) {
 		var sql = """
-				SELECT id, name, email, age
+				SELECT id, name, email, age, gender
 				FROM customer
 				WHERE id = ?
 				""";
@@ -43,14 +43,15 @@ public class CustomerJDBCDAS implements CustomerDao{
 	public void insertCustomer(Customer customer) {
 		// TODO Auto-generated method stub
 		var sql = """
-				INSERT INTO customer (name, email, age)
-				VALUES (?, ?, ?)
+				INSERT INTO customer (name, email, age, gender)
+				VALUES (?, ?, ?, ?)
 				""";
 		int result = JdbcTemplate.update(
 				sql,
 				customer.getName(), 
 				customer.getEmail(),
-				customer.getAge());
+				customer.getAge(),
+				customer.getGender().name());
 		System.out.println("jdbcTemplate.update = " + result);
 	}
 
@@ -103,6 +104,11 @@ public class CustomerJDBCDAS implements CustomerDao{
 		if (update.getEmail() != null) {
 			String sql = "UPDATE customer SET email = ? WHERE id = ?";
 			int result = JdbcTemplate.update(sql, update.getEmail(), update.getId());
+			System.out.println("update customer result = "+ result);
+		}
+		if (update.getGender() != null) {
+			String sql = "UPDATE customer SET gender = ? WHERE id = ?";
+			int result = JdbcTemplate.update(sql, update.getGender().name(), update.getId());
 			System.out.println("update customer result = "+ result);
 		}
 	}
