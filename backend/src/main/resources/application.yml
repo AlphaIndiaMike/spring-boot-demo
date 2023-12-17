@@ -7,6 +7,10 @@ cors:
   allowed-origins: "*"
   allowed-methods: "*"
   
+jwtutil:
+  issuer: "http://localhost"
+  validity_days: 15
+  
 spring:
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/customer}

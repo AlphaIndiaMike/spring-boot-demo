@@ -33,7 +33,7 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 				FAKER.name().fullName(),
 				FAKER.internet().safeEmailAddress()+ "-" +UUID.randomUUID(),
 				20,
-				Gender.MALE);
+				Gender.MALE, "password");
 		underTest.insertCustomer(customer);
 		//When
 		List<Customer> customers = underTest.selectAllCustomers();
@@ -51,7 +51,7 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 				FAKER.name().fullName(),
 				email,
 				200,
-				Gender.MALE);
+				Gender.MALE, "password");
 		
 		underTest.insertCustomer(customer);
 
@@ -99,7 +99,7 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 				FAKER.name().fullName(),
 				email,
 				200,
-				Gender.MALE);
+				Gender.MALE, "password");
 		
 		underTest.insertCustomer(customer);
 		
@@ -131,7 +131,7 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 				FAKER.name().fullName(),
 				email,
 				20,
-				Gender.MALE);
+				Gender.MALE, "password");
 		
 		underTest.insertCustomer(customer);
 		
@@ -171,7 +171,8 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 				FAKER.name().fullName(),
 				email,
 				20,
-				Gender.MALE);
+				Gender.MALE,
+				"password");
 		
 		underTest.insertCustomer(customer);
 		
@@ -200,7 +201,7 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 				FAKER.name().fullName(),
 				email,
 				20,
-				Gender.MALE);
+				Gender.MALE, "password");
 		
 		underTest.insertCustomer(customer);
 		
@@ -239,7 +240,7 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 				FAKER.name().fullName(),
 				email,
 				20,
-				Gender.MALE);
+				Gender.MALE, "password");
 		
 		underTest.insertCustomer(customer);
 		
@@ -278,7 +279,7 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 				FAKER.name().fullName(),
 				email,
 				20,
-				Gender.MALE);
+				Gender.MALE, "password");
 		
 		underTest.insertCustomer(customer);
 		
@@ -318,7 +319,7 @@ class CustomerJDBCDASTest extends AbstractTestcontainersUnitTest{
 				FAKER.name().fullName(),
 				email,
 				20,
-				Gender.MALE);
+				Gender.MALE, "password");
 		
 		underTest.insertCustomer(customer);
 		

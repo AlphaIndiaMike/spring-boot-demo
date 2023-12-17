@@ -20,7 +20,7 @@ public class CustomerJDBCDAS implements CustomerDao{
 	@Override
 	public List<Customer> selectAllCustomers() {
 		var sql = """
-				SELECT id, name, email, age, gender
+				SELECT id, name, email, age, gender, password
 				FROM customer
 				""";
 		List<Customer> customers = JdbcTemplate.query(sql, customerRowMapper);
@@ -30,7 +30,7 @@ public class CustomerJDBCDAS implements CustomerDao{
 	@Override
 	public Optional<Customer> selectCustomerById(Integer Id) {
 		var sql = """
-				SELECT id, name, email, age, gender
+				SELECT id, name, email, age, gender, password
 				FROM customer
 				WHERE id = ?
 				""";
@@ -43,15 +43,16 @@ public class CustomerJDBCDAS implements CustomerDao{
 	public void insertCustomer(Customer customer) {
 		// TODO Auto-generated method stub
 		var sql = """
-				INSERT INTO customer (name, email, age, gender)
-				VALUES (?, ?, ?, ?)
+				INSERT INTO customer (name, email, age, gender, password)
+				VALUES (?, ?, ?, ?, ?)
 				""";
 		int result = JdbcTemplate.update(
 				sql,
 				customer.getName(), 
 				customer.getEmail(),
 				customer.getAge(),
-				customer.getGender().name());
+				customer.getGender().name(),
+				customer.getPassword());
 		System.out.println("jdbcTemplate.update = " + result);
 	}
 
@@ -106,11 +107,28 @@ public class CustomerJDBCDAS implements CustomerDao{
 			int result = JdbcTemplate.update(sql, update.getEmail(), update.getId());
 			System.out.println("update customer result = "+ result);
 		}
+		if (update.getPassword() != null) {
+			String sql = "UPDATE customer SET password = ? WHERE id = ?";
+			int result = JdbcTemplate.update(sql, update.getPassword(), update.getId());
+			System.out.println("update customer result = "+ result);
+		}
 		if (update.getGender() != null) {
 			String sql = "UPDATE customer SET gender = ? WHERE id = ?";
 			int result = JdbcTemplate.update(sql, update.getGender().name(), update.getId());
 			System.out.println("update customer result = "+ result);
 		}
+	}
+
+	@Override
+	public Optional<Customer> selectUserByEmal(String email) {
+		var sql = """
+				SELECT id, name, email, age, gender, password
+				FROM customer
+				WHERE email = ?
+				""";
+		return JdbcTemplate.query(sql, customerRowMapper, email)
+				.stream()
+				.findFirst();
 	}
 
 }

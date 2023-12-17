@@ -5,8 +5,10 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpHeaders;
 import com.github.javafaker.Faker;
 import com.stag22.customer.Customer;
+import com.stag22.customer.CustomerDTO;
 import com.stag22.customer.CustomerRegistrationRequest;
 import com.stag22.customer.CustomerUpdateRequest;
 import com.stag22.customer.Gender;
@@ -40,56 +42,60 @@ public class CustomerIntegrationTest {
 		Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
 		
  		CustomerRegistrationRequest request = new CustomerRegistrationRequest(
- 				name, email, age, gender);
+ 				name, email, age, gender, "password");
 		
 		//send a post request
- 		postmann.post()
+ 		String jwtToken = postmann.post()
  			.uri("/api/v1/customers")
  			.accept(MediaType.APPLICATION_JSON)
  			.contentType(MediaType.APPLICATION_JSON)
  			.body(Mono.just(request), CustomerRegistrationRequest.class)
  			.exchange()
  			.expectStatus()
- 			.isOk();
+ 			.isOk()
+ 			.returnResult(Void.class)
+ 			.getResponseHeaders()
+ 			.get(HttpHeaders.AUTHORIZATION)
+ 			.get(0);
  		
 		//get all customers
- 		List<Customer> allCustomers = postmann.get()
+ 		List<CustomerDTO> allCustomers = postmann.get()
  			.uri("/api/v1/customers")
  			.accept(MediaType.APPLICATION_JSON)
+ 			.header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
  			.exchange()
  			.expectStatus()
  			.isOk()
- 			.expectBodyList(new ParameterizedTypeReference<Customer>() {})
+ 			.expectBodyList(new ParameterizedTypeReference<CustomerDTO>() {})
  			.returnResult()
  			.getResponseBody();
  		
 		//make sure that customer is present
- 		Customer expected = new Customer(name, email, age, gender);
- 			
- 		assertThat(allCustomers)
- 			.usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
- 			.contains(expected);
+ 		//Customer expected = new Customer(name, email, age, gender, "password");
 		
 		//get customer by id
  		var id = allCustomers.stream()
- 				.filter(c -> c.getEmail().equals(email))
- 				.map(Customer::getId)
+ 				.filter(c -> c.email().equals(email))
+ 				.map(CustomerDTO::id)
  				.findFirst()
  				.orElseThrow();
  		
- 		expected.setId((long)id);
+ 		CustomerDTO expectedCustomer=new CustomerDTO(id, name, email, gender,age, List.of("ROLE_USER"), email);
+			
+ 		assertThat(allCustomers).contains(expectedCustomer);
  		
  		postmann.get()
 			.uri("/api/v1/customers" + "/{id}", id)
 			.accept(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
 			.exchange()
 			.expectStatus()
 			.isOk()
-			.expectBody(new ParameterizedTypeReference<Customer>() {})
+			.expectBody(new ParameterizedTypeReference<CustomerDTO>() {})
 			.consumeWith(response ->
 	        	assertThat(response.getResponseBody())
 	        		.usingRecursiveComparison()
-	        		.isEqualTo(expected));
+	        		.isEqualTo(expectedCustomer));
 	}
 	
 	@Test
@@ -101,7 +107,7 @@ public class CustomerIntegrationTest {
 		int age = FAKER.random().nextInt(18, 90);
 		Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
  		CustomerRegistrationRequest request = new CustomerRegistrationRequest(
- 				name, email, age, gender);
+ 				name, email, age, gender, "password");
 		
 		//send a post request
  		postmann.post()
@@ -158,7 +164,7 @@ public class CustomerIntegrationTest {
 		int age = FAKER.random().nextInt(18, 90);
 		Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
  		CustomerRegistrationRequest request = new CustomerRegistrationRequest(
- 				name, email, age, gender);
+ 				name, email, age, gender, "password");
 		
 		//send a post request
  		postmann.post()
@@ -192,7 +198,7 @@ public class CustomerIntegrationTest {
  		String newName = "George";
  		
  		CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
- 				newName, null, null, null
+ 				newName, null, null, null, null
  				);
  				
  		
@@ -216,7 +222,7 @@ public class CustomerIntegrationTest {
 			.returnResult()
 			.getResponseBody();
 			
- 		Customer customer = new Customer(id, newName, email, age, gender);
+ 		Customer customer = new Customer(id, newName, email, age, gender, "password");
  		
  		assertThat(updatedCustomer)
  			.usingRecursiveComparison()

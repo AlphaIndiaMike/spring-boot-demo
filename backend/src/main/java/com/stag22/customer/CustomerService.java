@@ -1,32 +1,45 @@
 package com.stag22.customer;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.stag22.exception.DuplicateResourceException;
 import com.stag22.exception.RequestValidationException;
-import com.stag22.exception.ResourceNotFound;
+import com.stag22.exception.ResourceNotFoundException;
 
 @Service
 public class CustomerService {
 	private final CustomerDao customerDao;
+	private final PasswordEncoder passwordEncoder;
+	private final CustomerDTOMapper customerDTOMapper;
 	
 	// here change the implementation from Qualifier
-	public CustomerService(@Qualifier("jdbc") CustomerDao customerDao) {
+	public CustomerService(
+			@Qualifier("jdbc") CustomerDao customerDao,
+			PasswordEncoder passwordEncoder,
+			CustomerDTOMapper customerDTOMapper) {
 		this.customerDao = customerDao;
+		this.passwordEncoder = passwordEncoder;
+		this.customerDTOMapper = customerDTOMapper;
 	}
 	
 	
-	public List<Customer> getAllCustomers(){
-		return customerDao.selectAllCustomers();
+	public List<CustomerDTO> getAllCustomers(){
+		return customerDao.selectAllCustomers()
+				.stream()
+				.map(customerDTOMapper)
+				.collect(Collectors.toList());
 	}
 	
-	public Customer getCustomer(Integer id) {
+	public CustomerDTO getCustomer(Integer id) {
 		return customerDao.selectCustomerById(id)
+				.map(customerDTOMapper)
 				.orElseThrow(
-					() -> new ResourceNotFound("customer with id %s not found!".formatted(id))
+					() -> new ResourceNotFoundException("customer with id %s not found!".formatted(id))
 				);
 	}
 	
@@ -41,7 +54,8 @@ public class CustomerService {
 					customerRegReq.name(),
 					customerRegReq.email(),
 					customerRegReq.age(),
-					customerRegReq.gender()
+					customerRegReq.gender(), 
+					passwordEncoder.encode(customerRegReq.password())
 					);
 					
 			customerDao.insertCustomer(customer);
@@ -51,7 +65,7 @@ public class CustomerService {
 
 	public void deleteCustomerById(Integer customerId) {
 		if (!customerDao.existsPersonWithId(customerId)) {
-			throw new ResourceNotFound(
+			throw new ResourceNotFoundException(
 					"customer with id [%s] not found".formatted(customerId));
 		}
 		customerDao.deleteCustomerById(customerId);
@@ -61,10 +75,17 @@ public class CustomerService {
 	public void updateCustomer(Integer customerId, 
 							   CustomerUpdateRequest customerUpdReq) {
 		if (!customerDao.existsPersonWithId(customerId)) {
-			throw new ResourceNotFound(
+			throw new ResourceNotFoundException(
 					"customer with id [%s] not found".formatted(customerId));
 		}
-		Customer customer = getCustomer(customerId);
+		//Customer customer = getCustomer(customerId);
+		Customer customer = customerDao.selectCustomerById(customerId)
+								.orElseThrow(
+										() -> new ResourceNotFoundException(
+												"customer with id %s not found!".formatted(customerId)
+											)
+							);
+		
 		boolean changes = false;
 		
 		if (customerUpdReq.name() != null && !customerUpdReq.name().equals(customer.getName())) {
