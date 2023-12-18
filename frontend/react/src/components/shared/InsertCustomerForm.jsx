@@ -47,14 +47,17 @@ const InsertCustomerForm = ({ fetchCustomers }) => {
             setSubmitting(true);
             saveCustomer(values)
                 .then(res => {
+                    console.info(res);
                     successNotification(
                       "Customer saved",
-                      `${customer.name} was successfully saved`
+                      `${values.name} was successfully saved`
                     )
                 }).catch(err => {
+                  console.info(err);
+                  console.info(err.code);
                     errorNotification(
                       err.code,
-                      //err.response.data.message
+                      err.response.data.message
                     )
                 }).finally(() => {
                     console.info(values);

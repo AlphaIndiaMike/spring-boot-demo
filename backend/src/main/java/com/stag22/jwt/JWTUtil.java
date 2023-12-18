@@ -64,6 +64,7 @@ public class JWTUtil {
 	}
 	
 	public Claims getClaims(String token) {
+		System.out.println("JWT String: " + token);
 		Claims claims = Jwts
 				.parserBuilder()
 				.setSigningKey(getSigningKey())
