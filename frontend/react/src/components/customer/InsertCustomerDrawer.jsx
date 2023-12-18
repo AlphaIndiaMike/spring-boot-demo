@@ -9,7 +9,7 @@ import {
     DrawerCloseButton,
     useDisclosure
   } from '@chakra-ui/react';
-import InsertCustomerForm from './InsertCustomerForm';
+import InsertCustomerForm from '../shared/InsertCustomerForm';
 
 
 const AddIcon = () => "+";

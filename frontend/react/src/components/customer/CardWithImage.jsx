@@ -15,9 +15,9 @@ import {
 } from '@chakra-ui/react'
 
 import React from 'react'
-import DeleteDialog from './shared/DeleteDialog';
-import { deleteCustomer } from '../services/client';
-import { successNotification } from '../services/notification';
+import DeleteDialog from '../shared/DeleteDialog';
+import { deleteCustomer } from '../../services/client';
+import { successNotification } from '../../services/notification';
 import UpdateCustomerDrawer from './UpdateCustomerDrawer';
 
 export default function CardWithImage({id, name, email, age, gender, ImageNumber, fetchCustomers}) {

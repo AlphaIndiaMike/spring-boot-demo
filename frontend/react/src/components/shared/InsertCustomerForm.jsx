@@ -1,53 +1,26 @@
 //import React from 'react';
 //import ReactDOM from 'react-dom';
-import { Formik, Form, useField } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { FormLabel, Input, Alert, AlertIcon, Select, Box, Button,
-            Stack } from "@chakra-ui/react"
-import { updateCustomer } from '../services/client';
-import { errorNotification, successNotification } from '../services/notification';
-
-const MyTextInput = ({ label, ...props }) => {
-  // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
-  // which we can spread on <input>. We can use field meta to show an error
-  // message if the field is invalid and it has been touched (i.e. visited)
-  const [field, meta] = useField(props);
-  return (
-    <Box>
-      <FormLabel htmlFor={props.id || props.name}>{label}</FormLabel>
-      <Input className="text-input" {...field} {...props} />
-      {meta.touched && meta.error ? (
-            <Alert className="error" status={"error"} mt={2}>
-                <AlertIcon/>
-                {meta.error}
-            </Alert>
-      ) : null}
-    </Box>
-  );
-};
-
-const MySelect = ({ label, ...props }) => {
-  const [field, meta] = useField(props);
-  return (
-    <Box>
-      <FormLabel htmlFor={props.id || props.name}>{label}</FormLabel>
-      <Select {...field} {...props} />
-      {meta.touched && meta.error ? (
-            <Alert className="error" status={"error"} mt={2}>
-                <AlertIcon/>
-                {meta.error}
-            </Alert>
-      ) : null}
-    </Box>
-  );
-};
+import { Button, Stack } from "@chakra-ui/react"
+import { saveCustomer } from '../../services/client';
+import { errorNotification, successNotification } from '../../services/notification';
+import MyTextInput from './MyTextInput';
+import MySelect from './MySelect';
+import LoginPasswordInput from './LoginPasswordInput';
 
 // And now we can use these
-const UpdateCustomerForm = ({ fetchCustomers, initialValues, id }) => {
+const InsertCustomerForm = ({ fetchCustomers }) => {
   return (
     <>
       <Formik
-        initialValues={initialValues}
+        initialValues={{
+          name: '',
+          email: '',
+          age: '',
+          gender: '', // added for our select
+          password: 'password'
+        }}
         validationSchema={Yup.object({
             name: Yup.string()
                 .min(3, "Minimum 3 characters")
@@ -60,29 +33,39 @@ const UpdateCustomerForm = ({ fetchCustomers, initialValues, id }) => {
                 .min(0, 'Minimum age is 0')
                 .max(1000, 'Are you a vampire?')
                 .required('Required'),
+            password: Yup.string()
+                .min(5, "Minimum 5 characters")
+                .required('password required'),
+            gender: Yup.string()
+                .oneOf(
+                ['MALE', 'FEMALE'],
+                'Invalid Gender'
+                )
+                .required('Required'),
         })}
         onSubmit={(values, { setSubmitting }) => {
             setSubmitting(true);
-            updateCustomer(id, values)
+            saveCustomer(values)
                 .then(res => {
                     successNotification(
-                      "Customer updated",
-                      `${values.name} was successfully updated`
+                      "Customer saved",
+                      `${customer.name} was successfully saved`
                     )
                 }).catch(err => {
                     errorNotification(
                       err.code,
-                      err.response.data.message
+                      //err.response.data.message
                     )
                 }).finally(() => {
+                    console.info(values);
                     setSubmitting(false);
-                    fetchCustomers();
+                    fetchCustomers && fetchCustomers();
                 })
         }}
       >
-        {({isValid, isSubmitting, dirty}) => (
-                <Form>
-                    <Stack spacing={"24px"}>
+        {({isValid, isSubmitting }) => (
+                <Form >
+                    <Stack spacing={"24px"} >
                         <MyTextInput
                             label="Name"
                             name="name"
@@ -104,9 +87,19 @@ const UpdateCustomerForm = ({ fetchCustomers, initialValues, id }) => {
                             placeholder="18"
                         />
 
+                        <MySelect label="Gender" name="gender">
+                            <option value="">Select a gender</option>
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
+                        </MySelect>
+
+                        <LoginPasswordInput
+                          label="Password"
+                          name="password"
+                          type="password"/>
+
                         <Button
-                        //dirty tells us if the values have changed
-                            isDisabled={ !(isValid && dirty) || isSubmitting }
+                            isDisabled={ !isValid || isSubmitting }
                                 type="submit"
                                 colorScheme={"teal"} 
                                 mt={2}
@@ -123,4 +116,4 @@ const UpdateCustomerForm = ({ fetchCustomers, initialValues, id }) => {
   );
 };
 
-export default UpdateCustomerForm
+export default InsertCustomerForm
