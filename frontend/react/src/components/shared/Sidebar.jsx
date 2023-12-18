@@ -26,8 +26,6 @@ import {
 import SidebarContent from './SidebarContent'
 import {useAuth} from '../context/AuthContext'
 
-
-
 const MobileNav = ({ onOpen, ...rest }) => {
   const {customer, logout} = useAuth();
 
@@ -95,7 +93,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />
-              <MenuItem onClick={logout()}>Sign out</MenuItem>
+              <MenuItem onClick={logout}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         </Flex>
@@ -122,7 +120,7 @@ const SidebarWithHeader = ({children}) => {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
+      <MobileNav onOpen={onOpen}/>
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>

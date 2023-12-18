@@ -10,7 +10,7 @@ import MySelect from './MySelect';
 import LoginPasswordInput from './LoginPasswordInput';
 
 // And now we can use these
-const InsertCustomerForm = ({ fetchCustomers }) => {
+const InsertCustomerForm = ({ onSuccess }) => {
   return (
     <>
       <Formik
@@ -52,6 +52,7 @@ const InsertCustomerForm = ({ fetchCustomers }) => {
                       "Customer saved",
                       `${values.name} was successfully saved`
                     )
+                    onSuccess(res.headers["authorization"]);
                 }).catch(err => {
                   console.info(err);
                   console.info(err.code);
@@ -62,7 +63,6 @@ const InsertCustomerForm = ({ fetchCustomers }) => {
                 }).finally(() => {
                     console.info(values);
                     setSubmitting(false);
-                    fetchCustomers && fetchCustomers();
                 })
         }}
       >

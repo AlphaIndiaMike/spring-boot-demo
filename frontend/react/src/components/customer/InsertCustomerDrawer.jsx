@@ -31,7 +31,7 @@ const InsertCustomerDrawer = ({ fetchCustomers }) => {
 
                 <DrawerBody>
                     <InsertCustomerForm
-                        fetchCustomers={fetchCustomers}
+                        onSuccess={fetchCustomers}
                     ></InsertCustomerForm>
                 </DrawerBody>
 
