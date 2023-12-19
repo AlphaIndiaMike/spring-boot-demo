@@ -4,11 +4,11 @@ import {
     Icon,
   } from '@chakra-ui/react'
 
-const NavItem = ({ icon, children, ...rest }) => {
+const NavItem = ({ icon, children, link, ...rest }) => {
     return (
       <Box
         as="a"
-        href="#"
+        href={link}
         style={{ textDecoration: 'none' }}
         _focus={{ boxShadow: 'none' }}>
         <Flex

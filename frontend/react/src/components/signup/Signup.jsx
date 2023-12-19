@@ -24,7 +24,7 @@ const Signup = () => {
                     onSuccess={(token) => {
                         localStorage.setItem("access_token", token);
                         setCustomerFromToken();
-                        navigate("/dashboard");
+                        navigate("/dashboard/customers");
                     }}
                 />
             </Box>
