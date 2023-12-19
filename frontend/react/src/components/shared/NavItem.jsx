@@ -4,11 +4,11 @@ import {
     Icon,
   } from '@chakra-ui/react'
 
-const NavItem = ({ icon, children, ...rest }) => {
+const NavItem = ({ icon, children, link, ...rest }) => {
     return (
       <Box
         as="a"
-        href="#"
+        href={link}
         style={{ textDecoration: 'none' }}
         _focus={{ boxShadow: 'none' }}>
         <Flex
@@ -19,7 +19,7 @@ const NavItem = ({ icon, children, ...rest }) => {
           role="group"
           cursor="pointer"
           _hover={{
-            bg: 'cyan.400',
+            bg: 'teal.400',
             color: 'white',
           }}
           {...rest}>

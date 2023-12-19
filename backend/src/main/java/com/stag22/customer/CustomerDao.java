@@ -11,4 +11,5 @@ public interface CustomerDao {
 	public boolean existsPersonWithId(Integer Id);
 	public void deleteCustomerById(Integer Id);
 	void updateCustomer(Customer update);
+	Optional<Customer> selectUserByEmal(String email);
 }

@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.github.javafaker.Faker;
 import com.stag22.customer.Customer;
@@ -29,14 +30,17 @@ public class Main {
 	}
 	
 	@Bean
-	CommandLineRunner runner(CustomerRepository cRep) {
+	CommandLineRunner runner(
+			CustomerRepository cRep,
+			PasswordEncoder penc) {
 		var faker = new Faker();
 		return args -> {
 			Customer alex = new Customer(
 					faker.name().fullName(),
 					faker.internet().safeEmailAddress(),
 					faker.number().numberBetween(18, 90),
-					Gender.MALE
+					Gender.MALE,
+					penc.encode("password")
 			);
 		    cRep.save(alex);
 		};

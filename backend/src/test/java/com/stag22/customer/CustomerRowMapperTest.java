@@ -24,13 +24,14 @@ class CustomerRowMapperTest {
 		when(resultSet.getString("name")).thenReturn("Jamila");
 		when(resultSet.getString("email")).thenReturn("Jamila@gmail.com");
 		when(resultSet.getString("gender")).thenReturn("FEMALE"); 
+		when(resultSet.getString("password")).thenReturn("password");
 		
 		//WHen
 		Customer actual = cRM.mapRow(resultSet,1);
 		
 		//Then 
 		Customer expected = new Customer(
-				1L,"Jamila","Jamila@gmail.com",19,Gender.FEMALE
+				1L,"Jamila","Jamila@gmail.com",19,Gender.FEMALE, "password"
 				);
 		assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
 	}

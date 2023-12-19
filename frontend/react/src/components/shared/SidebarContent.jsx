@@ -8,20 +8,16 @@ import {
   } from '@chakra-ui/react'
   import{
     FiHome,
-    FiTrendingUp,
-    FiCompass,
-    FiStar,
+    FiUsers,
     FiSettings,
   } from 'react-icons/fi'
   import logo from '../../assets/logo-q.png';
   import NavItem from './NavItem';
 
 const LinkItems = [
-    { name: 'Home', icon: FiHome },
-    { name: 'Trending', icon: FiTrendingUp },
-    { name: 'Explore', icon: FiCompass },
-    { name: 'Favourites', icon: FiStar },
-    { name: 'Settings', icon: FiSettings },
+    { name: 'Home', icon: FiHome, href: '/' },
+    { name: 'Customers', icon: FiUsers, href: '/dashboard/customers' },
+    { name: 'Settings', icon: FiSettings, href: '#' },
   ]
 
 const SidebarContent = ({ onClose, ...rest }) => {
@@ -53,7 +49,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
             <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
         </Flex>
         {LinkItems.map((link) => (
-          <NavItem key={link.name} icon={link.icon}>
+          <NavItem key={link.name} icon={link.icon} link={link.href}> 
             {link.name}
           </NavItem>
         ))}

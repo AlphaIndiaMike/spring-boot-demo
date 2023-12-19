@@ -2,25 +2,35 @@ import { Wrap, WrapItem, Spinner, Text } from '@chakra-ui/react'
 import SidebarWithHeader from './components/shared/Sidebar';
 import { useEffect, useState } from 'react';
 import { getCustomers } from './services/client';
-import CardWithImage from './components/CardWithImage';
+import CardWithImage from './components/customer/CardWithImage';
+import InsertCustomerDrawer from './components/customer/InsertCustomerDrawer';
+import { errorNotification, successNotification } from './services/notification';
 
-const App = () => {
+const Customer = () => {
 
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  useEffect(function() {
+  const [err, setError] = useState("");
+  const fetchCustomers = () => {
     setLoading(true);
     setTimeout( () => {
       getCustomers().then(res => {
-        //console.log(res);
+        console.log(res);
         setCustomers(res.data);
       }).catch(err => {
-        console.log(err);
+          setError(err.response.data.message);
+          errorNotification(
+            err.code,
+            err.response.data.message
+          )
       }).finally(() => {
         setLoading(false);
       })
     }, 500)
+  }
+
+  useEffect(function() {
+    fetchCustomers();
   }, [])
 
   if (loading) {
@@ -35,22 +45,29 @@ const App = () => {
     </SidebarWithHeader>)
   }
 
-  if (customers.length <= 0){
+  if ((customers.length <= 0) || (err)){
     return (
       <SidebarWithHeader>
-        <Text>Empty</Text>
+        <InsertCustomerDrawer
+          fetchCustomers={fetchCustomers}
+        ></InsertCustomerDrawer>
+        <Text mt={5}>Empty</Text>
       </SidebarWithHeader>
     )
   }
 
   return (
     <SidebarWithHeader>
+      <InsertCustomerDrawer
+        fetchCustomers={fetchCustomers}
+      ></InsertCustomerDrawer>
       <Wrap justify={"left"} spacing={"30px"}>
         {customers.map((customer, index) => (
           <WrapItem key={index}>
             <CardWithImage
               {...customer}
               ImageNumber={index}
+              fetchCustomers={fetchCustomers}
             ></CardWithImage>
           </WrapItem>
         ))}
@@ -59,4 +76,4 @@ const App = () => {
   )
 }
 
-export default App;
+export default Customer;

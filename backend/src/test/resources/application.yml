@@ -6,7 +6,12 @@ server:
 cors:
   allowed-origins: "*"
   allowed-methods: "*"
-  
+  allowed-headers: "*"
+  exposed-headers: "*"
+
+jwtutil:
+  issuer: "http://localhost"
+  validity_days: 15
 
 spring:
   datasource:

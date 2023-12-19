@@ -19,7 +19,8 @@ public class CustomerListDAS implements CustomerDao{
 				"Alex",
 				"alex@gmail.com",
 				21,
-				Gender.MALE
+				Gender.MALE,
+				"password"
 		);
 		customers.add(alex);
 		
@@ -29,7 +30,8 @@ public class CustomerListDAS implements CustomerDao{
 	        "Brian",
 	        "brian@example.com",
 	        35,
-	        Gender.MALE
+	        Gender.MALE, 
+	        "password"
 	    );
 	    customers.add(brian);
 
@@ -38,7 +40,8 @@ public class CustomerListDAS implements CustomerDao{
 	        "Charlotte",
 	        "charlotte@example.com",
 	        28,
-	        Gender.FEMALE
+	        Gender.FEMALE,
+	        "password"
 	    );
 	    customers.add(charlotte);
 
@@ -47,7 +50,8 @@ public class CustomerListDAS implements CustomerDao{
 	        "Diana",
 	        "diana@example.com",
 	        42,
-	        Gender.FEMALE
+	        Gender.FEMALE,
+	        "password"
 	    );
 	    customers.add(diana);
 	}
@@ -60,7 +64,6 @@ public class CustomerListDAS implements CustomerDao{
 
 	@Override
 	public Optional<Customer> selectCustomerById(Integer Id) {
-		// TODO Auto-generated method stub
 		return customers.stream()
 					.filter(c -> c.getId().equals(Id))
 					.findFirst();
@@ -100,6 +103,13 @@ public class CustomerListDAS implements CustomerDao{
 	public void updateCustomer(Customer update) {
 		// TODO Auto-generated method stub
 		customers.add(update);
+	}
+
+	@Override
+	public Optional<Customer> selectUserByEmal(String email) {
+		return customers.stream()
+				.filter(c -> c.getEmail().equals(email))
+				.findFirst();
 	}
 
 }

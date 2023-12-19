@@ -10,9 +10,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 //import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.stag22.exception.DuplicateResourceException;
-import com.stag22.exception.ResourceNotFound;
+import com.stag22.exception.ResourceNotFoundException;
 
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,11 +26,14 @@ class CustomerServiceTest {
 	
 	@Mock
 	private CustomerDao customerDao;
+	@Mock
+	PasswordEncoder passwordEncoder;
 	private CustomerService underTest;
+	private final CustomerDTOMapper customerDTOMapper = new CustomerDTOMapper();
 
 	@BeforeEach
 	void setUp() throws Exception {
-		underTest = new CustomerService (customerDao);
+		underTest = new CustomerService (customerDao, passwordEncoder, customerDTOMapper);
 	}
 
 	@AfterEach
@@ -56,15 +60,17 @@ class CustomerServiceTest {
 				"Alex",
 				"alex@gmail.com",
 				23,
-				Gender.MALE);
+				Gender.MALE, "password");
 		Mockito.when(customerDao.selectCustomerById((int)(long)id))
 			.thenReturn(Optional.of(customer));
 		
+		CustomerDTO expected = customerDTOMapper.apply(customer);
+		
 		// WHen
-		Customer actual = underTest.getCustomer((int)(long)id);
+		CustomerDTO actual = underTest.getCustomer((int)(long)id);
 		
 		//Then
-		assertThat(actual).isEqualTo(customer);
+		assertThat(actual).isEqualTo(expected);
 	}
 	
 	
@@ -80,7 +86,7 @@ class CustomerServiceTest {
 		
 		//Then
 		assertThatThrownBy(()-> underTest.getCustomer((int)(long)id))
-			.isInstanceOf(ResourceNotFound.class)
+			.isInstanceOf(ResourceNotFoundException.class)
 			.hasMessageContaining("customer with id %s not found".formatted(id));
 	}
 	
@@ -93,8 +99,11 @@ class CustomerServiceTest {
 			.thenReturn(false);
 		
 		CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-			"Alex", email, 19, Gender.MALE
+			"Alex", email, 19, Gender.MALE, "password"
 		);
+		
+		String passwordHash = "hash_test_str";
+		Mockito.when(passwordEncoder.encode("password")).thenReturn(passwordHash);
 		//When
 		underTest.addCustomer(request);
 		
@@ -102,11 +111,12 @@ class CustomerServiceTest {
 		ArgumentCaptor<Customer> cAC = ArgumentCaptor.forClass(Customer.class);
 		Mockito.verify(customerDao).insertCustomer(cAC.capture());
 		
-		Customer captureCustoer = cAC.getValue();
-		assertThat(captureCustoer.getId()).isNull();
-		assertThat(captureCustoer.getName()).isEqualTo(request.name());
-		assertThat(captureCustoer.getEmail()).isEqualTo(request.email());
-		assertThat(captureCustoer.getAge()).isEqualTo(request.age());
+		Customer captureCus = cAC.getValue();
+		assertThat(captureCus.getId()).isNull();
+		assertThat(captureCus.getName()).isEqualTo(request.name());
+		assertThat(captureCus.getEmail()).isEqualTo(request.email());
+		assertThat(captureCus.getAge()).isEqualTo(request.age());
+		assertThat(captureCus.getPassword()).isEqualTo(passwordHash);
 	}
 	
 	@Test
@@ -118,7 +128,7 @@ class CustomerServiceTest {
 			.thenReturn(true);
 		
 		CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-				"Alex", email, 19, Gender.MALE
+				"Alex", email, 19, Gender.MALE, "password"
 			);
 		
 		//When
@@ -154,7 +164,7 @@ class CustomerServiceTest {
 		
 		//When
 		assertThatThrownBy(() -> underTest.deleteCustomerById((int)(long)id))
-			.isInstanceOf(ResourceNotFound.class)
+			.isInstanceOf(ResourceNotFoundException.class)
 			.hasMessage("customer with id [10] not found");
 		
 		//Then
@@ -171,14 +181,14 @@ class CustomerServiceTest {
 				"Alex",
 				"alex@gmail.com",
 				23,
-				Gender.MALE);
+				Gender.MALE, "password");
 		String newEmail = "john@gmail.com";
 		Mockito.when(customerDao.selectCustomerById((int)(long)id))
 			.thenReturn(Optional.of(customer));
 		Mockito.when(customerDao.existsPersonWithId((int)(long)id)).thenReturn(true);
 		
 		CustomerUpdateRequest request = new CustomerUpdateRequest(
-				"John", newEmail, 19, Gender.MALE
+				"John", newEmail, 19, Gender.MALE, "password"
 			);
 		
 		Mockito.when(customerDao.existsPersonWithEmail(newEmail)).thenReturn(false);

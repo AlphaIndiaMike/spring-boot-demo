@@ -50,4 +50,9 @@ public class CustomerJPADAS implements CustomerDao{
 		customerRepository.save(update);
 	}
 
+	@Override
+	public Optional<Customer> selectUserByEmal(String email) {
+		return customerRepository.findCustomerByEmail(email);
+	}
+
 }

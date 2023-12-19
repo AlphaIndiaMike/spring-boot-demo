@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    container_name: postgres
+    container_name: postgres_512
     image: postgres
     restart: unless-stopped
     environment:
