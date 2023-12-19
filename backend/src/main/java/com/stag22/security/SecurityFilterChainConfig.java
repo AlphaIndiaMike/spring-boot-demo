@@ -40,6 +40,8 @@ public class SecurityFilterChainConfig {
 			.authorizeHttpRequests()
 			.requestMatchers(HttpMethod.POST, "/api/v1/customers", "/api/v1/auth/login")
 			.permitAll()
+			.requestMatchers(HttpMethod.GET, "/actuator/**")
+			.permitAll()
 			.anyRequest()
 			.authenticated()
 			.and()

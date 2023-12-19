@@ -26,7 +26,6 @@
 		<jsonwebtoken.version>0.12.3</jsonwebtoken.version>
 		-->
 		<!-- It's sooo experimental, already completely obsolete in 12', what a BS! -->
-		
 		<jsonwebtoken.version>0.11.5</jsonwebtoken.version>
 		
 	</properties>
@@ -112,6 +111,11 @@
         <artifactId>spring-security-test</artifactId>
     </dependency>
     
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    
     <!-- Jave Web Token (JWT) lib -->
     <dependency>
         <groupId>io.jsonwebtoken</groupId>
@@ -142,6 +146,8 @@
         <scope>runtime</scope>
     </dependency>
     -->
+    
+    <!-- Endpoints for controlling and monitoring the application - wow! -->
 
 	</dependencies>
 	<build>

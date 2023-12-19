@@ -101,5 +101,4 @@ public class JWTUtil {
 		if (claims == null) return true;
 		return claims.getExpiration().before(now);
 	}
-	
 }
