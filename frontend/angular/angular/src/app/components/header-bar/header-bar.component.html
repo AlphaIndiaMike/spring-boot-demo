@@ -1,0 +1,33 @@
+<div class="flex flex-column align-items-end border-bottom-1 border-gray-200 pt-3 pb-3">
+    <div class="flex flex-row align-items-center">
+        <p-button 
+            icon="pi pi-bell" 
+            [rounded]="true" 
+            [text]="true" 
+            severity="secondary">
+        </p-button>
+        <p-avatar
+            size="normal"
+            shape="circle"
+            class="mr-2"
+            image="assets/images/logo-mouse-1.png"
+        >
+        </p-avatar>
+        <div>
+            <p class="text-base mb-0 mt-1 text-gray-700">username&#64;gmail.com</p>
+            <p class="text-sm mb-1 mt-0 text-gray-500">ROLE_UNC</p>
+        </div>
+        <div>
+            <p-toast></p-toast>
+            <p-menu #menu [model]="items" [popup]="true" (onShow)="openMenu()"></p-menu>
+            <p-button 
+                icon="pi pi-angle-down" 
+                [rounded]="true" 
+                [text]="true" 
+                severity="secondary"
+                (click)="menu.toggle($event)">
+            </p-button>
+        </div>
+    </div>
+
+</div>
