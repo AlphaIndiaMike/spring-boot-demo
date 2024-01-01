@@ -24,9 +24,13 @@
             severity="success" 
             label="Create customer"
             (click)="sidebarVisible2 = true"></p-button>
-            <div>
-                Cards
-            </div>
+        </div>
+        <div class="card-container">
+            <app-customer-cards
+            *ngFor="let customer of customers"
+            [customer]="customer"
+            >    
+            </app-customer-cards>
         </div>
     </div>
 </div>

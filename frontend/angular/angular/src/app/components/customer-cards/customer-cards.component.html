@@ -1,0 +1,23 @@
+<div class="card flex p-3 justify-content-center">
+    <p-card [header]="customer.name"
+        [subheader]="customer.email"
+        [style]="{ width: '316px' }">
+        <ng-template pTemplate="header">
+            <div class="border-round-top cover">
+            </div>
+            <div class="flex justify-content-center" style="margin-top:-104px;">
+                <img class="customer-avatar"
+                [src]="imageUrl"/>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="content">
+            <p-badge [value]="customer.id?.toString()"></p-badge>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <div class="flex justify-content-center">
+                <p-button label="Update" styleClass="p-button-secondary"></p-button>
+                <p-button label="Delete" severity="danger" [style]="{ 'margin-left': '.5em' }"></p-button>
+            </div>
+        </ng-template>
+    </p-card>
+</div>
