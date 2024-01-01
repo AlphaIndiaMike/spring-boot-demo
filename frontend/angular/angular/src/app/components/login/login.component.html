@@ -1,0 +1,54 @@
+<div class="flex" style="height:100vh;">
+    <div class="col-6 flex flex-column p-5 m-auto">
+        <div class="text-center">
+            <p-avatar
+                image="assets/images/logo-q.png"
+                styleClass="mr-2"
+                size="xlarge"
+                shape="circle"
+            >
+            </p-avatar>
+            <h2>Sign in to your account</h2>
+        </div>
+        <div>
+            <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
+        </div>
+        <form (ngSubmit)="login()">
+            <div class="field">
+                <label for="email" style="padding-left:12px;">E-mail</label>
+                <input 
+                    id="email"
+                    type="email" 
+                    pInputText 
+                    placeholder="email@domain.com"
+                    class="w-full"
+                    name="email"
+                    [(ngModel)]="authReq.username"/>
+            </div>
+            <div class="field">
+                <label for="password" style="padding-left:12px;">Password</label>
+                <input 
+                    id="password"
+                    type="password" 
+                    pInputText 
+                    placeholder=""
+                    class="w-full"
+                    name="password"
+                    [(ngModel)]="authReq.password"/>
+            </div>
+            <div class="field">
+                <p-button label="Login" [style]="{'width':'100%'}"
+                (click)="login()"></p-button>
+            </div>
+            <button type="submit" style="display:none">hidden submit</button>
+        </form>
+        <div class="field">
+            <p-button label="Don't have an account? Sign-up now." [link]="true" [style]="{'width':'100%'}"></p-button>
+        </div>
+    </div>
+    <div class="col-6 flex flex-column" style="background-color: gainsboro;">
+
+    </div>
+
+
+</div>
