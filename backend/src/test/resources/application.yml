@@ -28,6 +28,12 @@ spring:
     show-sql: true #default - false
   main:
     web-application-type: SERVLET
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+  codec:
+    max-in-memory-size: 15MB
 logging:
   level:
     org.flywaydb: DEBUG
