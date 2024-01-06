@@ -1,7 +1,6 @@
 import { CustomerDTO } from "./customer-dto";
 
 export interface AuthenticationResponse {
-    token?: string;
-    CustomerDTO: CustomerDTO;
-    
+    token?: string;   
+    customerDTO?: CustomerDTO;
 }

@@ -43,7 +43,9 @@
             <button type="submit" style="display:none">hidden submit</button>
         </form>
         <div class="field">
-            <p-button label="Don't have an account? Sign-up now." [link]="true" [style]="{'width':'100%'}"></p-button>
+            <p-button 
+            (click)="goToRegister()"
+            label="Don't have an account? Sign-up now." [link]="true" [style]="{'width':'100%'}"></p-button>
         </div>
     </div>
     <div class="col-6 flex flex-column" style="background-color: gainsboro;">

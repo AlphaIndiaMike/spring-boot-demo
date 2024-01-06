@@ -1,6 +1,5 @@
 .main-container {
     background-color: #edf2f7;
-    height:100%;
 }
 
 .side-bar-menue {
@@ -12,4 +11,5 @@
     display: flex;
     flex-direction: row; /* Align children horizontally */
     flex-wrap: wrap; /* Wrap onto new lines if needed */
+    align-items: flex-start;
 }

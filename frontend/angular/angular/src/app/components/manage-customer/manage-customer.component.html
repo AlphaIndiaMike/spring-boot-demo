@@ -1,8 +1,9 @@
 <div>
-    <h2 style="padding-left:2px;">Title here</h2>
+    <h2 style="padding-left:2px;">{{operation === 'update' ? 'New Customer' : 'Update Customer'}}</h2>
     <div class="field">
         <label for="firstname" style="padding-left:12px;">Name</label>
         <input 
+            [(ngModel)]="customer.name"
             id="firstname"
             type="text" 
             pInputText 
@@ -12,6 +13,7 @@
     <div class="field">
         <label for="email" style="padding-left:12px;">E-mail</label>
         <input 
+            [(ngModel)]="customer.email"
             id="email"
             type="email" 
             pInputText 
@@ -21,22 +23,24 @@
     <div class="field">
         <label for="age" style="padding-left:12px;">Age</label>
         <input 
+            [(ngModel)]="customer.age"
             id="age"
             type="number" 
             pInputText 
             placeholder="18"
             class="w-full"/>
     </div>
-    <div class="field">
+    <div class="field" *ngIf="operation === 'create'">
         <label for="password" style="padding-left:12px;">Password</label>
         <input 
+            [(ngModel)]="customer.password"
             id="password"
             type="password" 
             pInputText 
             placeholder=""
             class="w-full"/>
     </div>
-    <div class="field">
+    <div class="field" *ngIf="operation === 'create'">
         <label for="password2" style="padding-left:12px;">Re-Password</label>
         <input 
             id="password2"
@@ -45,20 +49,25 @@
             placeholder=""
             class="w-full"/>
     </div>
-    <div class="field">
+    <div class="field" *ngIf="operation === 'create'">
         <label for="gender" style="padding-left:12px;">Gender</label>
         <select id="gender"
+            [(ngModel)]="customer.gender"
             class="p-dropdown w-full custom-select">
-            <option>Select an option</option>
-            <option>MALE</option>
-            <option>FEMALE</option>
+            <option value="">Select an option</option>
+            <option value="MALE">MALE</option>
+            <option value="FEMALE">FEMALE</option>
         </select>
     </div>
     
 
-    <p-button label="Submit" icon="pi pi-check" class="button-right"></p-button>
+    <p-button 
+        [disabled]="!isCustomerValid"
+        (click)="onSubmit()"
+        label="Submit" icon="pi pi-check" class="button-right"></p-button>
 
     <button pButton label="Cancel"
+        (click)="onCancel()"
         class="p-button-outlined p-button-danger button-right mr-2"
     >
     </button>

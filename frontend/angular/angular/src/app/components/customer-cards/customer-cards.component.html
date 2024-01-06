@@ -15,8 +15,12 @@
         </ng-template>
         <ng-template pTemplate="footer">
             <div class="flex justify-content-center">
-                <p-button label="Update" styleClass="p-button-secondary"></p-button>
-                <p-button label="Delete" severity="danger" [style]="{ 'margin-left': '.5em' }"></p-button>
+                <p-button 
+                (click)="onUpdate()"
+                label="Update" styleClass="p-button-secondary"></p-button>
+                <p-button 
+                (click)="onDelete()"
+                label="Delete" severity="danger" [style]="{ 'margin-left': '.5em' }"></p-button>
             </div>
         </ng-template>
     </p-card>

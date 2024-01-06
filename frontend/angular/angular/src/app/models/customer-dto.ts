@@ -1,5 +1,5 @@
 export interface CustomerDTO{
-    id? : number;
+	id? : number;
 	name?: string;
 	email?: string;
 	gender?: 'MALE' | 'FEMALE';
