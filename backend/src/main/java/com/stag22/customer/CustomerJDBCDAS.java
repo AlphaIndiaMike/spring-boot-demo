@@ -19,9 +19,11 @@ public class CustomerJDBCDAS implements CustomerDao{
 
 	@Override
 	public List<Customer> selectAllCustomers() {
+		// TODO: pagination
 		var sql = """
 				SELECT id, name, email, age, gender, password
 				FROM customer
+				LIMIT 1000
 				""";
 		List<Customer> customers = JdbcTemplate.query(sql, customerRowMapper);
 		return customers;

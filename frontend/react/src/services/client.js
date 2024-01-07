@@ -62,3 +62,34 @@ export const login = async (usernameAndPassword) => {
         throw e;
     }
 }
+
+export const uploadCustomerProfilePicture = async (id, formData) => {
+    console.log(`${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${id}/profile-image`);
+    try {
+        return axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${id}/profile-image`,
+            formData,
+            {
+                ...getAuthConfig(),
+                'Content-Type' : 'multipart/form-data'
+            }
+        );
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const customerProfilePicture = async (customerId) => {
+    try {
+        const response = await axios.get(
+            `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${customerId}/profile-image`,
+            {
+                ...getAuthConfig(),
+                responseType: 'blob' // Correct way to handle binary data
+            }
+        );
+        return response.data; // This will be a blob
+    } catch (e) {
+        throw e;
+    }
+}

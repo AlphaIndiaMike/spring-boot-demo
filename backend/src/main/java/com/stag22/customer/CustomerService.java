@@ -1,15 +1,22 @@
 package com.stag22.customer;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.stag22.exception.DuplicateResourceException;
 import com.stag22.exception.RequestValidationException;
 import com.stag22.exception.ResourceNotFoundException;
+import com.stag22.storage.AvatarStorageUtil;
 
 @Service
 public class CustomerService {
@@ -116,6 +123,39 @@ public class CustomerService {
 		}
 				
 		customerDao.updateCustomer(customer);
+	}
+
+
+	public void setCustomerAvatar(Integer customerId, MultipartFile file) {
+		if (!customerDao.existsPersonWithId(customerId)) {
+			throw new ResourceNotFoundException(
+					"customer with id [%s] not found".formatted(customerId));
+		}
+		
+        try {
+            // Use AvatarStorageUtil to upload the image
+            AvatarStorageUtil.uploadCustomerImage(customerId, file);
+        } catch (IOException e) {
+            // Handle I/O exceptions, possibly wrap in a custom exception
+            throw new RuntimeException("Failed to upload image", e);
+        } catch (IllegalArgumentException e) {
+            // Handle file validation exceptions
+            throw new RuntimeException("Invalid file", e);
+        }
+	}
+
+
+	public byte[] getCustomerAvatar(Integer customerId) {
+        try {
+            // Use AvatarStorageUtil to retrieve the image
+            return AvatarStorageUtil.getCustomerImage(customerId);
+        } catch (IOException e) {
+            // Handle I/O exceptions, possibly wrap in a custom exception
+            throw new RuntimeException("Failed to retrieve image", e);
+        } catch (ResourceNotFoundException e) {
+            // Handle case where the avatar is not found
+            throw e;
+        }
 	}
 	
 }

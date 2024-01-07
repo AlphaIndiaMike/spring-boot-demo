@@ -4,6 +4,7 @@ import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,13 @@ public class JWTUtil {
 	
 	public String issueToken(String subject, List<String> scopes) {
 		return issueToken(subject, Map.of("scopes", scopes));
+	}
+	
+	public String issueToken(String subject, Long uid, List<String> scopes) {
+	    Map<String, Object> claims = new HashMap<>();
+	    claims.put("scopes", scopes);
+	    claims.put("uid", uid); // Add the uid to the claims map
+	    return issueToken(subject, claims);
 	}
 	
 	public String issueToken(String subject, Map<String, Object> claims) {

@@ -3,6 +3,8 @@ package com.stag22.customer;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository("jpa")
@@ -16,7 +18,8 @@ public class CustomerJPADAS implements CustomerDao{
 
 	@Override
 	public List<Customer> selectAllCustomers() {
-		return customerRepository.findAll();
+		Page<Customer> page = customerRepository.findAll(Pageable.ofSize(1000));
+		return page.getContent();
 	}
 
 	@Override

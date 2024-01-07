@@ -1,0 +1,6 @@
+
+<div class="card flex justify-content-center">
+    <p-toast></p-toast>
+    <p-menu #menu [model]="items" [popup]="true"></p-menu>
+    <button pButton type="button" (click)="menu.toggle($event)" icon="pi pi-bars" label="Show"></button>
+</div>

@@ -3,6 +3,7 @@ package com.stag22.customer;
 import java.util.List;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.stag22.jwt.JWTUtil;
 
@@ -66,6 +68,26 @@ public class CustomerController {
 			@PathVariable("customerId") Integer customerId,
 			@RequestBody CustomerUpdateRequest request) {
 		customerService.updateCustomer(customerId, request);
+	}
+	
+	@PostMapping(
+			value = "{customerId}/profile-image",
+			consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+			)
+	public void uploadCustomerAvatar(
+			@PathVariable("customerId") Integer customerId,
+			@RequestParam("file") MultipartFile file
+	) {
+		customerService.setCustomerAvatar(customerId, file);
+	}
+	
+	@GetMapping(
+			value = "{customerId}/profile-image"
+			)
+	public byte[] getCustomerAvatar(
+			@PathVariable("customerId") Integer customerId
+	) {
+		return customerService.getCustomerAvatar(customerId);
 	}
 	
 	@GetMapping("/greet")
