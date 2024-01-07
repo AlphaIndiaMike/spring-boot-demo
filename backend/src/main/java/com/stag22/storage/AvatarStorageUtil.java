@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -74,7 +75,7 @@ public class AvatarStorageUtil {
         Path filePath = avatarDirectory.resolve(filename);
 
         // Save the file, avoiding overwriting existing files
-        saveFileAvoidingOverwrite(file, filePath);
+        saveFile(customerId, file, filePath);
     }
 
     public static byte[] getCustomerImage(Integer customerId) throws IOException {
@@ -100,12 +101,26 @@ public class AvatarStorageUtil {
         return customerId + "_" + safeFilename;
     }
 
-    private static void saveFileAvoidingOverwrite(MultipartFile file, Path filePath) throws IOException {
-        int counter = 0;
-        while (Files.exists(filePath)) {
-            String newFilename = String.format("%s_%d", filePath.getFileName().toString(), ++counter);
-            filePath = filePath.resolveSibling(newFilename);
+    private static void saveFile(Integer customerId, MultipartFile file, Path filePath) throws IOException {
+        // First, delete existing avatars for this customer
+        deleteExistingAvatars(customerId);
+
+        // Then, save the new avatar
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    // New method to delete existing avatars for a customer
+    private static void deleteExistingAvatars(Integer customerId) throws IOException {
+        Path avatarDirectory = getAvatarDirectoryPath();
+        File folder = new File(avatarDirectory.toString());
+        File[] listOfFiles = folder.listFiles();
+
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (file.isFile() && file.getName().startsWith(customerId.toString() + "_")) {
+                    file.delete();
+                }
+            }
         }
-        Files.copy(file.getInputStream(), filePath);
     }
 }

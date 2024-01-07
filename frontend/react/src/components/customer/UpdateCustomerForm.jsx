@@ -3,9 +3,87 @@
 import { Formik, Form, useField } from 'formik';
 import * as Yup from 'yup';
 import { FormLabel, Input, Alert, AlertIcon, Select, Box, Button,
-            Stack } from "@chakra-ui/react"
-import { updateCustomer } from '../../services/client';
+            Stack, VStack, Image } from "@chakra-ui/react"
+import { updateCustomer, 
+  uploadCustomerProfilePicture } from '../../services/client';
 import { errorNotification, successNotification } from '../../services/notification';
+import React, {useCallback, useMemo, useState} from 'react'
+import {useDropzone} from 'react-dropzone'
+import { useCustomerProfilePicture } from '../../hooks/useCustomerProfilePicture'
+
+const baseStyle = {
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: '20px',
+  borderWidth: 2,
+  borderRadius: 2,
+  borderColor: '#eeeeee',
+  borderStyle: 'dashed',
+  backgroundColor: '#fafafa',
+  color: '#bdbdbd',
+  outline: 'none',
+  transition: 'border .24s ease-in-out'
+};
+
+const focusedStyle = {
+  borderColor: '#2196f3'
+};
+
+const acceptStyle = {
+  borderColor: '#00e676'
+};
+
+const rejectStyle = {
+  borderColor: '#ff1744'
+};
+
+function StyledDropzone({customerId, onUploadComplete, ...props}) {
+  const onDrop = useCallback(acceptedFiles => {
+    const formData = new FormData();
+    formData.append("file", acceptedFiles[0])
+    uploadCustomerProfilePicture(
+      customerId,
+      formData
+    ).then(() => {
+      successNotification("Success", "Profile picture uploaded");
+      if(onUploadComplete && typeof onUploadComplete === 'function') {
+        onUploadComplete();
+      }
+    }).catch((e) => {
+      errorNotification("Error", "Profile picture failed to upload. Reason: " + e.message);
+    }) 
+  }, [customerId, onUploadComplete]);
+
+  const {
+    getRootProps,
+    getInputProps,
+    isFocused,
+    isDragAccept,
+    isDragReject
+  } = useDropzone({onDrop});
+
+  const style = useMemo(() => ({
+    ...baseStyle,
+    ...(isFocused ? focusedStyle : {}),
+    ...(isDragAccept ? acceptStyle : {}),
+    ...(isDragReject ? rejectStyle : {})
+  }), [
+    isFocused,
+    isDragAccept,
+    isDragReject
+  ]);
+
+  return (
+    <div className="container">
+      <div {...getRootProps({style})}>
+        <input {...getInputProps()} />
+        <p>Drag 'n' drop, or click to select the profile picture</p>
+      </div>
+    </div>
+  );
+}
 
 const MyTextInput = ({ label, ...props }) => {
   // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
@@ -44,8 +122,29 @@ const MySelect = ({ label, ...props }) => {
 
 // And now we can use these
 const UpdateCustomerForm = ({ fetchCustomers, initialValues, id }) => {
+  const [imageUpdateKey, setImageUpdateKey] = useState(0);
+  const imageBlobUrl = useCustomerProfilePicture(id, imageUpdateKey);
+
+  const handleImageUpload = () => {
+    // Increment the key to trigger a re-fetch
+    setImageUpdateKey(k => k + 1);
+    // Dispatch a custom event after successful image upload
+    window.dispatchEvent(new CustomEvent('avatarUpdated'));
+  };
+
   return (
     <>
+      <div style={{height:40 + 'px'}}></div>
+      <VStack spacing={'5'} mb={'5'}>
+        <Image 
+          key={imageUpdateKey}
+          borderRadius={'full'}
+          boxSize={'150px'}
+          objectFit={'cover'}
+          src={imageBlobUrl}/>
+      </VStack>
+      <StyledDropzone customerId={id} onUploadComplete={handleImageUpload}/>
+      <div style={{height:40 + 'px'}}></div>
       <Formik
         initialValues={initialValues}
         validationSchema={Yup.object({
@@ -69,6 +168,7 @@ const UpdateCustomerForm = ({ fetchCustomers, initialValues, id }) => {
                       "Customer updated",
                       `${values.name} was successfully updated`
                     )
+                    
                 }).catch(err => {
                     errorNotification(
                       err.code,

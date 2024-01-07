@@ -16,7 +16,8 @@ const AuthProvider = ({ children }) => {
             token = jwtDecode(token);
             setCustomer({
                 username: token.sub,
-                roles: token.scopes
+                roles: token.scopes,
+                uid: token.uid
             })
         }
     }
@@ -33,9 +34,13 @@ const AuthProvider = ({ children }) => {
                 localStorage.setItem("access_token", jwtToken);
                 
                 const decodedToken = jwtDecode(jwtToken);
+                console.log('----- decoded Token -----');
+                console.log(decodedToken);
+
                 setCustomer({
                     username: decodedToken.sub,
-                    roles: decodedToken.scopes
+                    roles: decodedToken.scopes,
+                    uid: decodedToken.uid
                 })
                 resolve();
             }).catch(err => {

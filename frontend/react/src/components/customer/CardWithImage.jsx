@@ -14,16 +14,35 @@ import {
   useDisclosure
 } from '@chakra-ui/react'
 
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import DeleteDialog from '../shared/DeleteDialog';
 import { deleteCustomer } from '../../services/client';
 import { successNotification } from '../../services/notification';
 import UpdateCustomerDrawer from './UpdateCustomerDrawer';
+import { useCustomerProfilePicture } from '../../hooks/useCustomerProfilePicture';
 
 export default function CardWithImage({id, name, email, age, gender, ImageNumber, fetchCustomers}) {
-  const randomUserGender = gender === "MALE" ? "men" : "women";  
+  //const randomUserGender = gender === "MALE" ? "men" : "women";  
+  const [imageUpdateKey, setImageUpdateKey] = useState(0);
+  const imageBlobUrl = useCustomerProfilePicture(id, imageUpdateKey);
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = React.useRef()
+
+  useEffect(() => {
+    const handleAvatarUpdate = () => {
+      setImageUpdateKey(prevKey => prevKey + 1);
+    };
+
+    // Add event listener
+    window.addEventListener('avatarUpdated', handleAvatarUpdate);
+
+    // Remove event listener on cleanup
+    return () => {
+      window.removeEventListener('avatarUpdated', handleAvatarUpdate);
+    };
+  }, []);
+
   return (
     <Center py={6}>
       <Box
@@ -46,9 +65,10 @@ export default function CardWithImage({id, name, email, age, gender, ImageNumber
         />
         <Flex justify={'center'} mt={-12}>
           <Avatar
+            key={imageUpdateKey}
             size={'xl'}
             src={
-              `https://randomuser.me/api/portraits/${randomUserGender}/${ImageNumber}.jpg`
+              imageBlobUrl
             }
             css={{
               border: '2px solid white',
